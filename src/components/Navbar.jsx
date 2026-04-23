@@ -29,8 +29,7 @@ const Navbar = ({ onShowCart }) => {
         <div className="container-fluid p-0 d-flex align-items-center justify-content-between">
           <Link to="/" className="navbar-brand m-0 flex-shrink-0 text-decoration-none">
             <div className="logo-wrapper position-relative">
-              <h2 className="m-0 text-danger fw-bold" style={{ letterSpacing: '2px' }}>ZEST & ZEST</h2>
-              <div className="sword-line"></div>
+              <h2 className="m-0 premium-logo fw-bold" style={{ letterSpacing: '2px' }}>ZEST & ZEST</h2>
             </div>
           </Link>
 
@@ -38,15 +37,15 @@ const Navbar = ({ onShowCart }) => {
           <div className="d-none d-md-flex align-items-center justify-content-center gap-3 flex-grow-1 font-body">
             <Link
               to="/my-orders"
-              className="btn btn-sm px-4 py-2 rounded-3 text-white fw-semibold transition border border-secondary border-opacity-25"
-              style={{ fontSize: '14px', backgroundColor: '#222' }}
+              className="btn btn-sm px-4 py-2 rounded-pill btn-glass fw-semibold"
+              style={{ fontSize: '14px' }}
             >
               Track Orders
             </Link>
             <Link
               to="/ballroom-booking"
-              className="btn btn-sm px-4 py-2 rounded-3 text-white fw-semibold transition"
-              style={{ fontSize: '14px', backgroundColor: '#333333', border: 'none' }}
+              className="btn btn-sm px-4 py-2 rounded-pill btn-premium fw-bold"
+              style={{ fontSize: '14px' }}
             >
               Ballroom Booking
             </Link>
@@ -58,15 +57,15 @@ const Navbar = ({ onShowCart }) => {
             <div className="d-md-none d-flex gap-2">
               <Link
                 to="/my-orders"
-                className="btn btn-sm px-3 py-2 rounded-3 text-white fw-semibold border border-secondary border-opacity-25"
-                style={{ fontSize: '11px', backgroundColor: '#222' }}
+                className="btn btn-sm px-3 py-2 rounded-pill btn-glass fw-semibold"
+                style={{ fontSize: '11px' }}
               >
-                Track Orders
+                Track
               </Link>
               <Link
                 to="/ballroom-booking"
-                className="btn btn-sm px-3 py-2 rounded-3 text-white fw-semibold"
-                style={{ fontSize: '11px', backgroundColor: '#333333', border: 'none' }}
+                className="btn btn-sm px-3 py-2 rounded-pill btn-premium fw-bold"
+                style={{ fontSize: '11px' }}
               >
                 Ballroom
               </Link>

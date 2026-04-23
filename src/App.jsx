@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import BallroomBooking from './pages/BallroomBooking'
@@ -20,6 +21,39 @@ import BookingManagement from './admin/pages/BookingManagement'
 import CouponManagement from './admin/pages/CouponManagement'
 
 function App() {
+  useEffect(() => {
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    const handleKeyDown = (e) => {
+      // F12
+      if (e.keyCode === 123) {
+        e.preventDefault();
+      }
+      // Ctrl+Shift+I
+      if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+        e.preventDefault();
+      }
+      // Ctrl+Shift+J
+      if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+        e.preventDefault();
+      }
+      // Ctrl+U
+      if (e.ctrlKey && e.keyCode === 85) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('contextmenu', handleContextMenu);
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('contextmenu', handleContextMenu);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <Router>
       <div className="App">

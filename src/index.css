@@ -3,14 +3,14 @@
 :root {
   --primary-color: #C02221;
   --secondary-color: #E6B15B;
-  --bg-dark: #3a0a09;
-  --cart-grey-bg: #2d2d2d;
-  --card-bg: #1A1211;
+  --bg-dark: #0A0A0A; /* Deeper black */
+  --cart-grey-bg: #1A1A1A;
+  --card-bg: #121212;
   --text-white: #FFFFFF;
-  --text-gray: #B3B3B3;
+  --text-gray: #A0A0A0;
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Outfit', sans-serif;
-  --transition: all 0.3s ease;
+  --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 body {
@@ -126,16 +126,63 @@ h4,
   background: linear-gradient(to left, black, transparent);
 }
 
-.sword-line {
+/* Premium Logo Styles */
+.premium-logo {
+  font-family: var(--font-heading);
+  background: linear-gradient(135deg, #FFF 0%, var(--secondary-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  position: relative;
+  transition: var(--transition);
+}
+
+.premium-logo::after {
+  content: '';
   position: absolute;
-  top: 50%;
-  left: -5%;
-  width: 110%;
+  bottom: -5px;
+  left: 0;
+  width: 0;
   height: 2px;
-  background: #E0E0E0;
-  opacity: 0.6;
-  transform: rotate(-1deg);
-  pointer-events: none;
+  background: var(--secondary-color);
+  transition: var(--transition);
+}
+
+.logo-wrapper:hover .premium-logo::after {
+  width: 50%;
+}
+
+/* Glassmorphism Buttons */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  transition: var(--transition);
+}
+
+.btn-glass:hover {
+  background: #1a1a1a !important;
+  border-color: var(--secondary-color) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(230, 177, 91, 0.3);
+}
+
+.btn-premium {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, #b88a44 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(230, 177, 91, 0.4);
+  color: #ffffff !important;
+  filter: brightness(1.1);
 }
 
 .whatsapp-btn {
@@ -232,21 +279,21 @@ h4,
     height: 40vh !important;
   }
 }
-
-.timing-banner {
-  font-size: 11px;
-  letter-spacing: 0.5px;
-}
-
 @media (min-width: 768px) {
+  .logo-wrapper h2 {
+    font-size: 2.2rem;
+  }
   .timing-banner {
     font-size: 14px;
     letter-spacing: 1px;
   }
+}
 
-  .logo-wrapper h2 {
-    font-size: 2.5rem;
-  }
+.timing-banner {
+  background: linear-gradient(90deg, #000 0%, #1a1a1a 50%, #000 100%);
+  border-bottom: 1px solid rgba(230, 177, 91, 0.2) !important;
+  font-size: 11px;
+  letter-spacing: 0.5px;
 }
 
 /* ─── Animation Keyframes ─── */
