@@ -23,6 +23,15 @@ export const fetchActiveRooms = createAsyncThunk('chat/fetchRooms', async (_, { 
     }
 });
 
+export const postMessage = createAsyncThunk('chat/postMessage', async (messageData, { rejectWithValue }) => {
+    try {
+        const res = await axios.post(BASE, messageData);
+        return res.data?.message; // returns the saved message object
+    } catch (err) {
+        return rejectWithValue(err.response?.data || err.message);
+    }
+});
+
 const chatSlice = createSlice({
     name: 'chat',
     initialState: { rooms: [], messages: {}, loading: false, error: null },
@@ -33,9 +42,13 @@ const chatSlice = createSlice({
             }
         },
         addMessage: (state, action) => {
-            const { roomId } = action.payload;
+            const { roomId, _id } = action.payload;
             if (!state.messages[roomId]) state.messages[roomId] = [];
-            state.messages[roomId].push(action.payload);
+            // Deduplicate by message _id (if it exists)
+            const exists = _id && state.messages[roomId].some(m => m._id === _id);
+            if (!exists) {
+                state.messages[roomId].push(action.payload);
+            }
         },
     },
     extraReducers: (builder) => {
@@ -46,9 +59,20 @@ const chatSlice = createSlice({
             })
             .addCase(fetchChatHistory.fulfilled, (state, action) => {
                 state.messages[action.payload.roomId] = action.payload.messages;
+            })
+            .addCase(postMessage.fulfilled, (state, action) => {
+                if (action.payload) {
+                    const { roomId, _id } = action.payload;
+                    if (!state.messages[roomId]) state.messages[roomId] = [];
+                    const exists = _id && state.messages[roomId].some(m => m._id === _id);
+                    if (!exists) {
+                        state.messages[roomId].push(action.payload);
+                    }
+                }
             });
     },
 });
 
 export const { addRoom, addMessage } = chatSlice.actions;
 export default chatSlice.reducer;
+

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchChatHistory, addMessage } from '../redux/slices/chatSlice';
+import { fetchChatHistory, addMessage, postMessage } from '../redux/slices/chatSlice';
 import { API_URL } from '../apiurl';
 import './ChatWidget.css';
 
@@ -42,6 +42,19 @@ const ChatWidget = () => {
         };
     }, [dispatch]);
 
+    // Poll chat history every 5 seconds when open
+    useEffect(() => {
+        if (!isOpen || !roomId) return;
+
+        dispatch(fetchChatHistory(roomId));
+
+        const interval = setInterval(() => {
+            dispatch(fetchChatHistory(roomId));
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [isOpen, roomId, dispatch]);
+
     useEffect(() => {
         if (chatBodyRef.current) {
             chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
@@ -59,7 +72,11 @@ const ChatWidget = () => {
             timestamp: new Date().toISOString()
         };
 
+        // Emitting via socket for real-time fallback
         socket.emit('send_message', messageData);
+        // Posting via REST API so it works on Vercel/serverless
+        dispatch(postMessage(messageData));
+
         setInputText('');
     };
 
@@ -117,3 +134,4 @@ const ChatWidget = () => {
 };
 
 export default ChatWidget;
+

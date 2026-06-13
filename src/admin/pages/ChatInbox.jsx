@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchActiveRooms, fetchChatHistory, addRoom, addMessage } from '../../redux/slices/chatSlice';
+import { fetchActiveRooms, fetchChatHistory, addRoom, addMessage, postMessage } from '../../redux/slices/chatSlice';
 import { API_URL } from '../../apiurl';
 import './ChatInbox.css';
 
@@ -14,9 +14,9 @@ const ChatInbox = () => {
     const [inputText, setInputText] = useState('');
     const chatBodyRef = useRef(null);
 
+    // Join admin room and listen for real-time messages (fallback)
     useEffect(() => {
         socket.emit('join_room', 'admins');
-        dispatch(fetchActiveRooms());
 
         socket.on('receive_message', (data) => {
             dispatch(addMessage(data));
@@ -28,9 +28,26 @@ const ChatInbox = () => {
         };
     }, [dispatch]);
 
+    // Poll active rooms every 5 seconds
+    useEffect(() => {
+        dispatch(fetchActiveRooms());
+        const interval = setInterval(() => {
+            dispatch(fetchActiveRooms());
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [dispatch]);
+
+    // Poll selected room chat history every 5 seconds
     useEffect(() => {
         if (!selectedRoom) return;
+        
         dispatch(fetchChatHistory(selectedRoom));
+        
+        const interval = setInterval(() => {
+            dispatch(fetchChatHistory(selectedRoom));
+        }, 5000);
+
+        return () => clearInterval(interval);
     }, [selectedRoom, dispatch]);
 
     useEffect(() => {
@@ -50,7 +67,11 @@ const ChatInbox = () => {
             timestamp: new Date().toISOString()
         };
 
+        // Emit via socket for real-time
         socket.emit('send_message', messageData);
+        // Post via REST API so it works on Vercel/serverless
+        dispatch(postMessage(messageData));
+
         setInputText('');
     };
 
@@ -151,3 +172,4 @@ const ChatInbox = () => {
 };
 
 export default ChatInbox;
+
