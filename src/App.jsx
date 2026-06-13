@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Home from './pages/Home'
 import BallroomBooking from './pages/BallroomBooking'
 import Login from './pages/Login'
+import AdminLogin from './pages/AdminLogin'
 import ProtectedRoute from './components/ProtectedRoute'
+import AdminProtectedRoute from './components/AdminProtectedRoute'
 import MyOrders from './pages/MyOrders'
 import AdminLayout from './admin/AdminLayout'
 import Dashboard from './admin/pages/Dashboard'
@@ -63,13 +65,16 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/my-orders" element={<MyOrders />} />
 
-          {/* Admin Routes */}
+          {/* Admin Login Page — /admin par seedha login form */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+
+          {/* Admin Panel Routes — sirf authenticated admin ke liye */}
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              <AdminProtectedRoute>
                 <AdminLayout />
-              </ProtectedRoute>
+              </AdminProtectedRoute>
             }
           >
             <Route index element={<Dashboard />} />
